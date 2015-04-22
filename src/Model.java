@@ -6,17 +6,12 @@ public class Model {
     public static Operation currentOperation = Operation.NULL;
     public static double solution = 0;
 
-    public static double getPreviousSolution() {
-        return previousSolution;
-    }
-
-    private static double previousSolution = 0;
+    private static Double previousSolution;
 
     private static double firstNumber;
     private static double secondNumber;
 
     public static double calculate(double firstReceivedNumber, double secondReceivedNumber) throws Exception {
-        previousSolution = solution;
         firstNumber = firstReceivedNumber;
         secondNumber = secondReceivedNumber;
 
@@ -36,6 +31,9 @@ public class Model {
             case NULL:
                 throw new Exception("No Operation Selected");
         }
+
+        previousSolution = solution;
+
         return solution;
     }
 
@@ -57,5 +55,13 @@ public class Model {
 
     private static void add() {
         solution = firstNumber + secondNumber;
+    }
+
+    public static double getPreviousSolution() throws Exception {
+        if(previousSolution == null) {
+            throw new Exception("Previous solution null.");
+        } else {
+            return previousSolution;
+        }
     }
 }
