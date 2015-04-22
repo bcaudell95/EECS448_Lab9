@@ -5,6 +5,11 @@ public class Model {
 
     public static Operation currentOperation = Operation.NULL;
     public static double solution = 0;
+
+    public static double getPreviousSolution() {
+        return previousSolution;
+    }
+
     private static double previousSolution = 0;
 
     private static double firstNumber;
