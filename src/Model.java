@@ -37,6 +37,7 @@ public class Model {
         return solution;
     }
 
+    //divide
     private static void divide() throws Exception {
         if(secondNumber == 0) {
             throw new Exception("Cannot divide by 0.");
