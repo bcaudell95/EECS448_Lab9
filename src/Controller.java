@@ -1,46 +1,44 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-
 public class Controller {
-
-	//Action listeners invoked by the GUI buttons
 	
-	public static final ActionListener firstLoadAction(JTextField textBox) {
-		return new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		};
+	static View view = new View();
+	
+	public static void run() {
+		view.setVisible(true);
 	}
 
-	public static final ActionListener additionAction = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			
-		}
-	};
-	public static final ActionListener subtractionAction = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			
-		}
-	};
-	public static final ActionListener multiplicationAction = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			
-		}
-	};
-	public static final ActionListener divisionAction = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			
-		}
-	};
+	public static void loadButtonClick(JTextField textBox) {
+		
+	}
 	
-	public static final ActionListener calculateAction = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			
+	public static void additionClick() {
+		Model.currentOperation = Model.Operation.ADDITION;
+	}
+	public static void subtractionClick() {
+		Model.currentOperation = Model.Operation.SUBTRACTION;
+	}
+	public static void multiplicationClick() {
+		Model.currentOperation = Model.Operation.MULTIPLICATION;
+	}
+	public static void divisionClick() {
+		Model.currentOperation = Model.Operation.DIVISION;
+	}
+	
+	public static void calculate(double firstNum, double secondNum) {
+		try {
+			double result = Model.calculate(firstNum, secondNum);
+			view.setResultText(""+result);
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
-	};
+	}
+
+	public static double getLastAnswer() throws Exception {
+		return Model.getPreviousSolution();
+	}
 }

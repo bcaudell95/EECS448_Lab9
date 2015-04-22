@@ -4,18 +4,29 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import java.awt.GridBagLayout;
+
 import javax.swing.JTextField;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
+
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.awt.Component;
+
 import javax.swing.Box;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 
 public class View extends JFrame {
@@ -24,22 +35,7 @@ public class View extends JFrame {
 	private JTextField firstNumberTextBox;
 	private JTextField secondNumberTextBox;
 	private JTextField resultTextBox;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					View frame = new View();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JLabel currOpLabel;
 
 	/**
 	 * Create the frame.
@@ -66,7 +62,7 @@ public class View extends JFrame {
 		contentPane.add(firstNumberTextBox, gbc_firstNumberTextBox);
 		firstNumberTextBox.setColumns(10);
 		
-		JLabel currOpLabel = new JLabel("[   ]");
+		currOpLabel = new JLabel("[   ]");
 		GridBagConstraints gbc_currOpLabel = new GridBagConstraints();
 		gbc_currOpLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_currOpLabel.anchor = GridBagConstraints.EAST;
@@ -84,7 +80,18 @@ public class View extends JFrame {
 		secondNumberTextBox.setColumns(10);
 		
 		JButton loadSavedValueBtn1 = new JButton("Load Saved Value");
-		loadSavedValueBtn1.addActionListener(Controller.firstLoadAction(firstNumberTextBox));
+		loadSavedValueBtn1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					double lastNum = Controller.getLastAnswer();
+					firstNumberTextBox.setText(""+lastNum);
+				}catch(Exception e1) {
+					
+				}
+			}
+		});
 		GridBagConstraints gbc_loadSavedValueBtn1 = new GridBagConstraints();
 		gbc_loadSavedValueBtn1.insets = new Insets(0, 0, 5, 5);
 		gbc_loadSavedValueBtn1.gridx = 0;
@@ -92,7 +99,18 @@ public class View extends JFrame {
 		contentPane.add(loadSavedValueBtn1, gbc_loadSavedValueBtn1);
 		
 		JButton loadSavedValueBtn2 = new JButton("Load Saved Value");
-		loadSavedValueBtn2.addActionListener(Controller.firstLoadAction(secondNumberTextBox));
+		loadSavedValueBtn2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					double lastNum = Controller.getLastAnswer();
+					secondNumberTextBox.setText(""+lastNum);
+				}catch(Exception e1) {
+					
+				}
+			}
+		});
 		GridBagConstraints gbc_loadSavedValueBtn2 = new GridBagConstraints();
 		gbc_loadSavedValueBtn2.insets = new Insets(0, 0, 5, 0);
 		gbc_loadSavedValueBtn2.gridx = 2;
@@ -115,7 +133,12 @@ public class View extends JFrame {
 		operationsPanel.setLayout(gbl_operationsPanel);
 		
 		JButton additionButton = new JButton("+");
-		additionButton.addActionListener(Controller.additionAction);
+		additionButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Controller.additionClick();
+				setOperationLabelText(" + ");
+			}
+		});
 		GridBagConstraints gbc_additionButton = new GridBagConstraints();
 		gbc_additionButton.anchor = GridBagConstraints.NORTH;
 		gbc_additionButton.insets = new Insets(0, 0, 0, 5);
@@ -124,7 +147,12 @@ public class View extends JFrame {
 		operationsPanel.add(additionButton, gbc_additionButton);
 		
 		JButton subtractionButton = new JButton("-");
-		subtractionButton.addActionListener(Controller.subtractionAction);
+		subtractionButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Controller.subtractionClick();
+				setOperationLabelText(" - ");
+			}
+		});
 		GridBagConstraints gbc_subtractionButton = new GridBagConstraints();
 		gbc_subtractionButton.anchor = GridBagConstraints.NORTH;
 		gbc_subtractionButton.insets = new Insets(0, 0, 0, 5);
@@ -133,7 +161,12 @@ public class View extends JFrame {
 		operationsPanel.add(subtractionButton, gbc_subtractionButton);
 		
 		JButton multiplicationButton = new JButton("*");
-		multiplicationButton.addActionListener(Controller.multiplicationAction);
+		multiplicationButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Controller.multiplicationClick();
+				setOperationLabelText(" * ");
+			}
+		});
 		GridBagConstraints gbc_multiplicationButton = new GridBagConstraints();
 		gbc_multiplicationButton.anchor = GridBagConstraints.NORTH;
 		gbc_multiplicationButton.insets = new Insets(0, 0, 0, 5);
@@ -142,7 +175,12 @@ public class View extends JFrame {
 		operationsPanel.add(multiplicationButton, gbc_multiplicationButton);
 		
 		JButton divisionButton = new JButton("/");
-		divisionButton.addActionListener(Controller.divisionAction);
+		divisionButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Controller.divisionClick();
+				setOperationLabelText(" / ");
+			}
+		});
 		GridBagConstraints gbc_divisionButton = new GridBagConstraints();
 		gbc_divisionButton.anchor = GridBagConstraints.NORTH;
 		gbc_divisionButton.gridx = 3;
@@ -160,11 +198,46 @@ public class View extends JFrame {
 		resultTextBox.setColumns(10);
 		
 		JButton calculateButton = new JButton("Calculate");
-		calculateButton.addActionListener(Controller.calculateAction);
+		calculateButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Controller.calculate(getFirstNumber(), getSecondNumber());
+				}catch(Exception e1) {
+					//e1.printStackTrace();
+				}
+			}
+		});
 		GridBagConstraints gbc_calculateButton = new GridBagConstraints();
 		gbc_calculateButton.gridx = 2;
 		gbc_calculateButton.gridy = 3;
 		contentPane.add(calculateButton, gbc_calculateButton);
+	}
+
+	public void setOperationLabelText(String text) {
+		this.currOpLabel.setText(text);
+		this.currOpLabel.repaint();
+	}
+	
+	public double getFirstNumber() throws NumberFormatException {
+		return Double.parseDouble(firstNumberTextBox.getText());
+	}
+	
+	public double getSecondNumber() throws NumberFormatException {
+		return Double.parseDouble(secondNumberTextBox.getText());
+	}
+
+	public void setResultText(String string) {
+		this.resultTextBox.setText(string);
+	}
+
+	public void setFirstNumberText(String string) {
+		this.firstNumberTextBox.setText(string);
+	}
+
+	public void setSecondNumberText(String string) {
+		this.secondNumberTextBox.setText(string);
 	}
 
 }
